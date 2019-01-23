@@ -14,24 +14,16 @@ namespace SentenceGenerator
                 ["drink"] = "verb",
                 ["break"] = "verb",
                 ["John"] = "personal-noun",
-                ["bottle"] = "noun"
-            };
-
-            var words1 = new Dictionary<string, string>
-            {
-                ["a"] = "personal-noun",
-                ["c"] = "verb",
-                ["d"] = "verb",
-                ["b"] = "personal-noun",
-                ["e"] = "noun",
+                ["bottle"] = "noun",
+                ["Emma"] = "personal-noun"
             };
 
             var template = new List<string> {"personal-noun", "verb", "noun"};
 
             var sentenceComposer = new SentenceComposer();
 
-            var result1 = sentenceComposer.Compose(words1, template).OrderBy(i => i).ToList();
-            var result2 = sentenceComposer.ComposeIterative(words1, template).OrderBy(i => i).ToList();
+            var result1 = sentenceComposer.Compose(words, template).OrderBy(i => i).ToList();
+            var result2 = sentenceComposer.ComposeIterative(words, template).OrderBy(i => i).ToList();
 
             Console.WriteLine("First result");
             foreach (var sentence in result1)
