@@ -40,7 +40,7 @@ namespace SentenceGenerator
                    template.Select(templatePart =>
                            words[templatePart][indexes[template.IndexOf(templatePart)]])
                        .ToList()) + ".";
-        
+
         public IEnumerable<string> Compose(Dictionary<string, string> words, List<string> template)
         {
             var grouping = words.GroupBy(x => x.Value).ToDictionary(i => i.Key, i => i.Select(k => k.Key).ToArray());
@@ -55,13 +55,17 @@ namespace SentenceGenerator
                 a[i] = new int[template.Count];
             }
 
+            var indexes = groupingCount.ToDictionary(i => i.Key, i => Enumerable.Range(0, i.Value));
+
             for (var i = 0; i < totalPossibleSentences; i++)
             {
                 for (var j = 0; j < template.Count; j++)
                 {
-                    a[i][j] = j;
+                    a[i][j] = indexes[template[j]].ElementAt(j);
                 }
+
             }
+
 
 
             //for (int i = 0, j = 0, k = 0; i < totalPossibleSentences; i++, k++)
