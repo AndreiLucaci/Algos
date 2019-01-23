@@ -50,9 +50,10 @@ namespace SentenceGenerator
             return
                 words
                     .GroupBy(x => x.Value)
-                    .Aggregate(new[] {new string[] { }},
-                        (acc, seq) => acc.SelectMany(j => seq, (l, r) => l.Concat(new[] {r.Key}).ToArray()).ToArray())
-                    .Select(i => string.Join(" ", i) + ".");
+                    .Aggregate(new [] { new KeyValuePair<string, string>[]{}},
+                        (acc, seq) => acc.SelectMany(j => seq, (l, r) => l.Concat(new[] {r}).ToArray()).ToArray())
+                        .Select(i => string.Join(" ", template.Select(j => i.Single(k => k.Value == j).Key)) + ".")
+                        .ToList();
         }
 
         #endregion
