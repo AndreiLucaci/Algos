@@ -43,50 +43,17 @@ namespace SentenceGenerator
 
         public IEnumerable<string> Compose(Dictionary<string, string> words, List<string> template)
         {
-            var grouping = words.GroupBy(x => x.Value).ToDictionary(i => i.Key, i => i.Select(k => k.Key).ToArray());
-            var groupingCount = grouping.ToDictionary(i => i.Key, i => i.Value.Length);
-            var totalPossibleSentences = groupingCount.Aggregate(1, (acc, val) => acc * val.Value);
-
-            var result = new List<string>();
-
-            var a = new int[totalPossibleSentences][];
-            for (var i = 0; i < a.Length; i++)
-            {
-                a[i] = new int[template.Count];
-            }
-
-            var indexes = groupingCount.ToDictionary(i => i.Key, i => Enumerable.Range(0, i.Value));
-
-            for (var i = 0; i < totalPossibleSentences; i++)
-            {
-                for (var j = 0; j < template.Count; j++)
-                {
-                    a[i][j] = indexes[template[j]].ElementAt(j);
-                }
-
-            }
-
-
-
-            //for (int i = 0, j = 0, k = 0; i < totalPossibleSentences; i++, k++)
-            //{
-            //    var lst = new List<string>();
-            //    var count = groupingCount[template[j]];
-            //    if (k == count)
-            //    {
-            //        k = 0;
-            //        j++;
-            //    }
-
-            //    foreach (var _ in template)
-            //    {
-            //        lst.Add(grouping[template[j]][k]);
-            //    }
-
-            //    result.Add(string.Join(" ", lst) + ".");
-            //}
-
-            return result;
+            return words.GroupBy(x => x.Value)
+                .ToDictionary(i => i.Key, i => i.Select(k => k.Key))
+                .Select(i => i.Value)
+                .Aggregate(
+                    (IEnumerable<IEnumerable<string>>) new[] {Enumerable.Empty<string>()},
+                    (acc, seq) =>
+                        acc.SelectMany(
+                            j => seq, (l, r) => l.Concat(new[] {r})
+                        )
+                )
+                .Select(i => string.Join(" ", i) + ".");
         }
     }
 }
