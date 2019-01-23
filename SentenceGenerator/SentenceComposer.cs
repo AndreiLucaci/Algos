@@ -47,17 +47,12 @@ namespace SentenceGenerator
 
         public IEnumerable<string> Compose(Dictionary<string, string> words, List<string> template)
         {
-            return words.GroupBy(x => x.Value)
-                .ToDictionary(i => i.Key, i => i.Select(k => k.Key))
-                .Select(i => i.Value)
-                .Aggregate(
-                    (IEnumerable<IEnumerable<string>>)new[] { Enumerable.Empty<string>() },
-                    (acc, seq) =>
-                        acc.SelectMany(
-                            j => seq, (l, r) => l.Concat(new[] { r })
-                        )
-                )
-                .Select(i => string.Join(" ", i) + ".");
+            return
+                words
+                    .GroupBy(x => x.Value)
+                    .Aggregate(new[] {new string[] { }},
+                        (acc, seq) => acc.SelectMany(j => seq, (l, r) => l.Concat(new[] {r.Key}).ToArray()).ToArray())
+                    .Select(i => string.Join(" ", i) + ".");
         }
 
         #endregion
