@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace SentenceGenerator
 {
     public class SentenceComposer
     {
         #region OriginalInterviewAlgorithm
+
         public IEnumerable<string> ComposeIterative(Dictionary<string, string> words, List<string> template)
         {
             var grouping = words.GroupBy(x => x.Value).ToDictionary(i => i.Key, i => i.Select(k => k.Key).ToList());
@@ -41,6 +41,7 @@ namespace SentenceGenerator
                    template.Select(templatePart =>
                            words[templatePart][indexes[template.IndexOf(templatePart)]])
                        .ToList()) + ".";
+
         #endregion
 
         #region MyAlgo
